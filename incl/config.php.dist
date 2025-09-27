@@ -1,0 +1,16 @@
+<?php
+
+
+$CONFIG['db'] = [
+    'host' => 'localhost',
+    'user' => 'hostwatch',
+    'db' => 'hostwatch',
+    'pass' => 'hostwatchpassword'
+];
+
+
+$CONFIG['fritz'] = [
+    'host' => '192.168.178.1',
+    'user' => 'fritz1234',
+    'pass' => 'fritzboxpassword'
+];

@@ -1,0 +1,6 @@
+{
+    "require": {
+        "blacksenator/fritzsoap": "^2.8",
+        "sergeytsalkov/meekrodb": "^3.1"
+    }
+}

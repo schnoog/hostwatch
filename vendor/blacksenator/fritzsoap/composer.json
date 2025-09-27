@@ -1,0 +1,24 @@
+{
+    "name": "blacksenator/fritzsoap",
+    "type": "library",
+    "keywords": ["SOAP", "TR-064", "fritzbox"],
+    "homepage": "https://github.com/blacksenator/fritzsoap",
+    "description": "Reading/writing FRITZ!Box data via SOAP interface",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Volker Püschel",
+            "email": "knuffy@anasco.de",
+            "role": "Developer"
+        }
+    ],
+    "require": {
+        "php": "^8.2",
+        "blacksenator/fbvalidateurl": "^1.2"
+    },
+    "autoload": {
+        "psr-4": {
+            "blacksenator\\fritzsoap\\": "src/"
+        }
+    }
+}

@@ -8,4 +8,6 @@ $baseDir = dirname($vendorDir);
 return array(
     'blacksenator\\fritzsoap\\' => array($vendorDir . '/blacksenator/fritzsoap/src'),
     'blacksenator\\fbvalidateurl\\' => array($vendorDir . '/blacksenator/fbvalidateurl/src'),
+    'Symfony\\Polyfill\\Mbstring\\' => array($vendorDir . '/symfony/polyfill-mbstring'),
+    'Smarty\\' => array($vendorDir . '/smarty/smarty/src'),
 );

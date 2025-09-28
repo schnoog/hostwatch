@@ -6,11 +6,21 @@ namespace Composer\Autoload;
 
 class ComposerStaticInitc2678a9a2575a3ec47dcb304f9f4e654
 {
+    public static $files = array (
+        '0e6d7bf4a5811bfa5cf40c5ccd6fae6a' => __DIR__ . '/..' . '/symfony/polyfill-mbstring/bootstrap.php',
+        'c15d4a1253e33e055d05e547c61dcb71' => __DIR__ . '/..' . '/smarty/smarty/src/functions.php',
+    );
+
     public static $prefixLengthsPsr4 = array (
         'b' => 
         array (
             'blacksenator\\fritzsoap\\' => 23,
             'blacksenator\\fbvalidateurl\\' => 27,
+        ),
+        'S' => 
+        array (
+            'Symfony\\Polyfill\\Mbstring\\' => 26,
+            'Smarty\\' => 7,
         ),
     );
 
@@ -22,6 +32,14 @@ class ComposerStaticInitc2678a9a2575a3ec47dcb304f9f4e654
         'blacksenator\\fbvalidateurl\\' => 
         array (
             0 => __DIR__ . '/..' . '/blacksenator/fbvalidateurl/src',
+        ),
+        'Symfony\\Polyfill\\Mbstring\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/symfony/polyfill-mbstring',
+        ),
+        'Smarty\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/smarty/smarty/src',
         ),
     );
 

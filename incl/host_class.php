@@ -17,7 +17,8 @@ class Host {
     public $Comment = null;        
     public $RequireOnline = null;  
     public $TrackChanges = null;
-    public $OwnName = null;   
+    public $OwnName = null;
+    public $ParentHost = null;   
 
     public function __construct($data = []) {
         foreach ($data as $key => $value) {
@@ -77,6 +78,9 @@ class Host {
     public function getOwnName() { return $this->OwnName; }
     public function setOwnName($v) { $this->OwnName = $v; return $this; }    
 
+    public function getParentHost() { return $this->ParentHost; }
+    public function setParentHost($v) { $this->ParentHost = $v; return $this; } 
+
     /* ----------------- DB Methods ----------------- */
 
     public function save($basicscan = true) {
@@ -93,6 +97,9 @@ class Host {
         if ($this->WANAccess !== null)      $data['WANAccess'] = $this->WANAccess;
         if ($this->VPN !== null)            $data['VPN'] = $this->VPN;
         if ($this->OwnName !== null)        $data['OwnName'] = $this->OwnName;
+        if ($this->ParentHost !== null)        $data['ParentHost'] = $this->ParentHost;
+
+
 
         if(!$basicscan){
             if ($this->VPN !== null)     $data['Comment']        = $this->Comment;

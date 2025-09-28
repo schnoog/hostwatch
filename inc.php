@@ -5,9 +5,10 @@ $INCD = $SBD . "incl/";
 
 
 require_once($SBD. "vendor/autoload.php");
+use Smarty\Smarty;
 
 
-
+$RenderNew = true;
 
 
 $includes = [
@@ -15,7 +16,8 @@ $includes = [
     "functions.php",
     "hoststate.php",
     "fbwork.php",
-    "config.php"
+    "config.php",
+    "call.php"
 ];
 
 foreach($includes as $include){
@@ -23,8 +25,14 @@ foreach($includes as $include){
 
 }
 
-    
-    
+
+$smarty = new Smarty();
+
+$smarty->setTemplateDir($INCD .'smarty/templates');
+$smarty->setCompileDir($INCD .'smarty/templates_c');
+$smarty->setCacheDir($INCD .'smarty/cache');
+$smarty->setConfigDir($INCD .'smarty/configs');
+
     
     
 

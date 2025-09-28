@@ -1,14 +1,34 @@
 <?php
 
 
-function OutputStates(){
-    $data = DB::query('Select * from hosts WHERE Active = 1 or Trackchanges = 1');
+function GetParentList(){
+    $ret = array();
+    $res = DB::query("Select Idx, OwnName, HostName, IPv4Address from hosts");
+    for($x=0;$x<count($res);$x++){
 
-    print_r($data);
+        $ret[ $res[$x]['Idx']  ] = $res[$x];
 
-
+    }
+    return $ret;
 }
 
+
+
+function OutputStates($all = false){
+    $ret = array();
+
+    $sql = 'Select * from hosts WHERE (Active = 1 or Trackchanges = 1) AND HideHost = 0 ORDER BY INET_ATON(IPv4Address)';
+    if($all) $sql = 'Select * from hosts WHERE HideHost = 0 ORDER BY INET_ATON(IPv4Address)';
+
+
+    $data = DB::query($sql);
+    for($x=0;$x < count($data);$x++){
+
+            $ret[ $data[$x]['Idx']] = $data[$x]  ;
+
+    }
+    return $ret;
+}
 
 
 

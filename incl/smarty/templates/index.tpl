@@ -8,6 +8,24 @@
 </head>
 
 <body>
+<div id="customPrompt" style="
+  position:fixed;
+  top:0; left:0;
+  width:100%; height:100%;
+  background:rgba(0,0,0,0.5);
+  display:none;
+  justify-content:center;
+  align-items:center;
+">
+  <div style="background:white; padding:20px; border-radius:8px; min-width:250px;">
+    <div id="customPromptMessage" style="margin-bottom:10px;"></div>
+    <select id="customPromptSelect" style="width:100%; margin-bottom:10px;"></select>
+    <div style="text-align:right;">
+      <button id="customPromptCancel">Cancel</button>
+      <button id="customPromptOk">OK</button>
+    </div>
+  </div>
+</div>
 
 
 <table border="1">
@@ -90,8 +108,6 @@ function ToggleRequireOnline(idx){
 
 
 function SendRequest(idx,req,val){
-
-
         const xhr = new XMLHttpRequest();
 
         const params = new URLSearchParams();
@@ -111,17 +127,69 @@ function SendRequest(idx,req,val){
             console.log(`Error: ${xhr.status}`);
         }
         };
+}
 
 
+function selectParent(idx,curr){
+    var Msg = "Select new parent node";
+
+{/literal}
 
 
+    
+    {foreach $parentdata as $pd}{if ($pd.Idx != idx)}{$abs[] =  $pd.OwnName }{/if}{/foreach}
 
+    var Opts = ['{implode("','",$abs)}'];
+    
+{literal}
+    selectPrompt(Msg,Opts);
 }
 
 
 
+function selectPrompt(message, options) {
+  return new Promise((resolve) => {
+    const modal = document.getElementById('customPrompt');
+    const msgEl = document.getElementById('customPromptMessage');
+    const selectEl = document.getElementById('customPromptSelect');
+    const okBtn = document.getElementById('customPromptOk');
+    const cancelBtn = document.getElementById('customPromptCancel');
+
+    // Fill modal content
+    msgEl.textContent = message;
+    selectEl.innerHTML = '';
+    options.forEach(opt => {
+      const o = document.createElement('option');
+      o.value = opt.value ?? opt;
+      o.textContent = opt.label ?? opt;
+      selectEl.appendChild(o);
+    });
+
+    // Show modal
+    modal.style.display = 'flex';
+
+    // Clean up old listeners
+    okBtn.onclick = cancelBtn.onclick = null;
+
+    okBtn.onclick = () => {
+      modal.style.display = 'none';
+      alert(selectEl.value);
+      resolve(selectEl.value);
+    };
+    cancelBtn.onclick = () => {
+      modal.style.display = 'none';
+      resolve(null);
+    };
+  });
+}
+
+
+
+
+
+
 </script>
-{/literal}}
+{/literal}
 
 
 </body>

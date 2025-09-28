@@ -1,18 +1,18 @@
 <?php
-/* Smarty version 5.5.2, created on 2025-09-28 20:30:01
+/* Smarty version 5.5.2, created on 2025-09-28 20:50:48
   from 'file:index.tpl' */
 
 /* @var \Smarty\Template $_smarty_tpl */
 if ($_smarty_tpl->getCompiled()->isFresh($_smarty_tpl, array (
   'version' => '5.5.2',
-  'unifunc' => 'content_68d99ac930a270_42553350',
+  'unifunc' => 'content_68d99fa8423806_12224427',
   'has_nocache_code' => false,
   'file_dependency' => 
   array (
     '95c06f6feec9564fb4bf3a9dc4563fa4db3fad65' => 
     array (
       0 => 'index.tpl',
-      1 => 1759091392,
+      1 => 1759092646,
       2 => 'file',
     ),
   ),
@@ -20,7 +20,7 @@ if ($_smarty_tpl->getCompiled()->isFresh($_smarty_tpl, array (
   array (
   ),
 ))) {
-function content_68d99ac930a270_42553350 (\Smarty\Template $_smarty_tpl) {
+function content_68d99fa8423806_12224427 (\Smarty\Template $_smarty_tpl) {
 $_smarty_current_dir = '/home/volker/Development/fritzphp/incl/smarty/templates';
 ?><html>
 <head>
@@ -36,6 +36,24 @@ $_smarty_current_dir = '/home/volker/Development/fritzphp/incl/smarty/templates'
 </head>
 
 <body>
+<div id="customPrompt" style="
+  position:fixed;
+  top:0; left:0;
+  width:100%; height:100%;
+  background:rgba(0,0,0,0.5);
+  display:none;
+  justify-content:center;
+  align-items:center;
+">
+  <div style="background:white; padding:20px; border-radius:8px; min-width:250px;">
+    <div id="customPromptMessage" style="margin-bottom:10px;"></div>
+    <select id="customPromptSelect" style="width:100%; margin-bottom:10px;"></select>
+    <div style="text-align:right;">
+      <button id="customPromptCancel">Cancel</button>
+      <button id="customPromptOk">OK</button>
+    </div>
+  </div>
+</div>
 
 
 <table border="1">
@@ -150,8 +168,6 @@ function ToggleRequireOnline(idx){
 
 
 function SendRequest(idx,req,val){
-
-
         const xhr = new XMLHttpRequest();
 
         const params = new URLSearchParams();
@@ -171,18 +187,85 @@ function SendRequest(idx,req,val){
             console.log(`Error: ${xhr.status}`);
         }
         };
-
-
-
-
-
 }
+
+
+function selectParent(idx,curr){
+    var Msg = "Select new parent node";
+
+
+
+
+    
+    <?php
+$_from = $_smarty_tpl->getSmarty()->getRuntime('Foreach')->init($_smarty_tpl, $_smarty_tpl->getValue('parentdata'), 'pd');
+$foreach1DoElse = true;
+foreach ($_from ?? [] as $_smarty_tpl->getVariable('pd')->value) {
+$foreach1DoElse = false;
+if (($_smarty_tpl->getValue('pd')['Idx'] != 'idx')) {
+$_tmp_array = $_smarty_tpl->getValue('abs') ?? [];
+if (!(is_array($_tmp_array) || $_tmp_array instanceof ArrayAccess)) {
+settype($_tmp_array, 'array');
+}
+$_tmp_array[] = $_smarty_tpl->getValue('pd')['OwnName'];
+$_smarty_tpl->assign('abs', $_tmp_array, false, NULL);
+}
+}
+$_smarty_tpl->getSmarty()->getRuntime('Foreach')->restore($_smarty_tpl, 1);?>
+
+    var Opts = ['<?php echo $_smarty_tpl->getSmarty()->getModifierCallback('implode')("','",$_smarty_tpl->getValue('abs'));?>
+'];
+    
+
+    selectPrompt(Msg,Opts);
+}
+
+
+
+function selectPrompt(message, options) {
+  return new Promise((resolve) => {
+    const modal = document.getElementById('customPrompt');
+    const msgEl = document.getElementById('customPromptMessage');
+    const selectEl = document.getElementById('customPromptSelect');
+    const okBtn = document.getElementById('customPromptOk');
+    const cancelBtn = document.getElementById('customPromptCancel');
+
+    // Fill modal content
+    msgEl.textContent = message;
+    selectEl.innerHTML = '';
+    options.forEach(opt => {
+      const o = document.createElement('option');
+      o.value = opt.value ?? opt;
+      o.textContent = opt.label ?? opt;
+      selectEl.appendChild(o);
+    });
+
+    // Show modal
+    modal.style.display = 'flex';
+
+    // Clean up old listeners
+    okBtn.onclick = cancelBtn.onclick = null;
+
+    okBtn.onclick = () => {
+      modal.style.display = 'none';
+      alert(selectEl.value);
+      resolve(selectEl.value);
+    };
+    cancelBtn.onclick = () => {
+      modal.style.display = 'none';
+      resolve(null);
+    };
+  });
+}
+
+
+
 
 
 
 <?php echo '</script'; ?>
 >
-}
+
 
 
 </body>

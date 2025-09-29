@@ -1,3 +1,5 @@
 testing/
 testing/*
 incl/config.php
+incl/smarty/templates_c/*
+incl/smarty/cache/*

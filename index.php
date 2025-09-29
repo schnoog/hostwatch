@@ -19,6 +19,8 @@ if(isset($_REQUEST['do'])){
 if($RenderNew){
 $hostdata = OutputStates($CALLALL);
 $parentdata = GetParentList();
+$parentlist = GetParentList(true);
+$targets = GetTargetsList();
 
 foreach($hostdata as $idx => $hostd ){
     $bgcolor = "";
@@ -33,8 +35,10 @@ foreach($hostdata as $idx => $hostd ){
     $hostdata[$idx]['bgc'] = $bgcolor;
 }
 
+$smarty->assign('targets',$targets);
 $smarty->assign('hosts',$hostdata);
 $smarty->assign('parentdata',$parentdata);
-$smarty->assign('dump',print_r($hostdata,true));
+$smarty->assign('parentlist',$parentlist);
+$smarty->assign('dump',print_r($targets,true));
 $smarty->display('index.tpl');
 }

@@ -6,9 +6,13 @@ function SetParent($idx,$parentidx){
 }
 
 
-function GetParentList(){
+function GetParentList($full = false){
     $ret = array();
-    $res = DB::query("Select Idx, OwnName, HostName, IPv4Address from hosts WHERE TrackChanges = 1");
+    if($full){
+        $res = DB::query("Select Idx, OwnName, HostName, IPv4Address from hosts");
+    }else{
+        $res = DB::query("Select Idx, OwnName, HostName, IPv4Address from hosts WHERE TrackChanges = 1");
+    }
     $ret[-1] =  ['OwnName' => "null", 'Idx' => -1];    
     for($x=0;$x<count($res);$x++){
 
@@ -97,4 +101,26 @@ function StateParse(){
         DB::insert('statechange',$updateData);
     }
 
+}
+
+
+
+function GetTargetsFull(){
+    $res = DB::query('SELECT t.*, h.*, t2.* FROM hostwatch.targets t 	JOIN hostwatch.hosts h ON t.hostid = h.Idx 	JOIN hostwatch.targettypes t2 ON t.targettypid = t2.id');
+    $ret = array();
+    for($x=0;$x < count($res);$x++){
+        $line = $res[$x];
+        $ret[$line['hostid']][] = $line;
+    }
+    return $ret;   
+}
+
+function GetTargetsList(){
+    $res = DB::query('SELECT t.*, t2.* FROM hostwatch.targets t 	JOIN hostwatch.targettypes t2 ON t.targettypid = t2.id');
+    $ret = array();
+    for($x=0;$x < count($res);$x++){
+        $line = $res[$x];
+        $ret[$line['hostid']][] = $line;
+    }
+    return $ret;   
 }

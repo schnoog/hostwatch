@@ -2,7 +2,7 @@
 
 function ProcessCall(){
 //Array ( [do] => 1 [req] => OwnName [idx] => 120 [val] => volker-PC ) 
-    print_r($_REQUEST);
+    echo json_encode($_REQUEST) . PHP_EOL;
 
     $idx = $_REQUEST['idx'];
     switch ($_REQUEST['req']) {
@@ -17,7 +17,9 @@ function ProcessCall(){
         case "ToggleRequireOnline":
             ToggleField($idx,"RequireOnline");
             break;
-
+        case "SetParent":
+            SetParent($idx,$_REQUEST['val']);
+            break;
 
         default:
             echo "zahl ist nicht 0";

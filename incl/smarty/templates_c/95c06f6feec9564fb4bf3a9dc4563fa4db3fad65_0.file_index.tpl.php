@@ -1,18 +1,18 @@
 <?php
-/* Smarty version 5.5.2, created on 2025-09-28 20:50:48
+/* Smarty version 5.5.2, created on 2025-09-29 18:26:09
   from 'file:index.tpl' */
 
 /* @var \Smarty\Template $_smarty_tpl */
 if ($_smarty_tpl->getCompiled()->isFresh($_smarty_tpl, array (
   'version' => '5.5.2',
-  'unifunc' => 'content_68d99fa8423806_12224427',
+  'unifunc' => 'content_68dacf413d3167_37900759',
   'has_nocache_code' => false,
   'file_dependency' => 
   array (
     '95c06f6feec9564fb4bf3a9dc4563fa4db3fad65' => 
     array (
       0 => 'index.tpl',
-      1 => 1759092646,
+      1 => 1759170366,
       2 => 'file',
     ),
   ),
@@ -20,7 +20,7 @@ if ($_smarty_tpl->getCompiled()->isFresh($_smarty_tpl, array (
   array (
   ),
 ))) {
-function content_68d99fa8423806_12224427 (\Smarty\Template $_smarty_tpl) {
+function content_68dacf413d3167_37900759 (\Smarty\Template $_smarty_tpl) {
 $_smarty_current_dir = '/home/volker/Development/fritzphp/incl/smarty/templates';
 ?><html>
 <head>
@@ -59,7 +59,7 @@ $_smarty_current_dir = '/home/volker/Development/fritzphp/incl/smarty/templates'
 <table border="1">
 <thead>
 <tr>
-<th>IP</th><th>OwnName</th><th>HostName</th><th>FriendlyName</th><th>Track - Changes</th><th>Require - Online</th><th>Parent</th>
+<th>IP</th><th>OwnName</th><th>HostName</th><th>FriendlyName</th><th>Track - Changes</th><th>Require - Online</th><th>Parent Host</th>
 </tr>
 </thead>
 <tbody>
@@ -69,11 +69,12 @@ $foreach0DoElse = true;
 foreach ($_from ?? [] as $_smarty_tpl->getVariable('host')->value) {
 $foreach0DoElse = false;
 ?>
-<tr <?php echo $_smarty_tpl->getValue('host')['bgc'];?>
->
-<td><?php echo $_smarty_tpl->getValue('host')['IPv4Address'];?>
+<tr>
+<td  <?php echo $_smarty_tpl->getValue('host')['bgc'];?>
+><?php echo $_smarty_tpl->getValue('host')['IPv4Address'];?>
 </td>
-    <td><?php if ((strlen((string) $_smarty_tpl->getValue('host')['OwnName']) > 0)) {
+<td <?php echo $_smarty_tpl->getValue('host')['bgc'];?>
+><?php if ((strlen((string) $_smarty_tpl->getValue('host')['OwnName']) > 0)) {
 echo $_smarty_tpl->getValue('host')['OwnName'];
 } else { ?>H:<?php echo $_smarty_tpl->getValue('host')['HostName'];
 }?> 
@@ -99,11 +100,8 @@ echo $_smarty_tpl->getValue('host')['HostName'];
     <?php if (($_smarty_tpl->getValue('host')['TrackChanges'] == 0)) {?>No<?php } else { ?>Yes<?php }?>  
                 </td><td width="20%" style="text-align: right;">  
     <button type="button" onclick="ToggleTrackChanges(<?php echo $_smarty_tpl->getValue('host')['Idx'];?>
-);"><?php if (($_smarty_tpl->getValue('host')['TrackChanges'] == 0)) {
-echo $_smarty_tpl->getValue('sw');
-} else {
-echo $_smarty_tpl->getValue('sw');
-}?></button>
+);"><?php echo $_smarty_tpl->getValue('sw');?>
+</button>
     </td></tr></table>
 </td>
 <td <?php if (($_smarty_tpl->getValue('host')['RequireOnline'] > 0)) {?>bgcolor='lightgreen'<?php } else { ?>bgcolor='white'<?php }?>>
@@ -112,11 +110,8 @@ echo $_smarty_tpl->getValue('sw');
     <?php if (($_smarty_tpl->getValue('host')['RequireOnline'] == 0)) {?>No<?php } else { ?>Yes<?php }?>
         </td><td width="20%" style="text-align: right;">
     <button type="button" onclick="ToggleRequireOnline(<?php echo $_smarty_tpl->getValue('host')['Idx'];?>
-);"><?php if (($_smarty_tpl->getValue('host')['RequireOnline'] == 0)) {
-echo $_smarty_tpl->getValue('sw');
-} else {
-echo $_smarty_tpl->getValue('sw');
-}?></button>
+);"><?php echo $_smarty_tpl->getValue('sw');?>
+</button>
     </td></tr></table>
 
 </td>
@@ -127,7 +122,16 @@ echo $_smarty_tpl->getValue('sw');
      <?php echo $_smarty_tpl->getValue('parentdata')[$_smarty_tpl->getValue('host')['ParentHost']]['OwnName'];?>
 
 <?php }?>
-
+    <?php if (($_smarty_tpl->getValue('host')['ParentHost'] > -1)) {?>
+    <button type="button" onclick="selectParent(<?php echo $_smarty_tpl->getValue('host')['Idx'];?>
+,<?php echo $_smarty_tpl->getValue('host')['ParentHost'];?>
+);"><?php echo $_smarty_tpl->getValue('sw');?>
+</button>
+    <?php } else { ?>
+    <button type="button" onclick="selectParent(<?php echo $_smarty_tpl->getValue('host')['Idx'];?>
+,null);"><?php echo $_smarty_tpl->getValue('sw');?>
+</button>
+    <?php }?>
 </td>
 
 </tr>
@@ -158,7 +162,7 @@ function ChangeOwnName(idx,oldname){
 }
 
 function ToggleTrackChanges(idx){
-    alert("TTC: " + idx);
+   
     SendRequest(idx,"ToggleTrackChanges",0);
 }
 
@@ -166,6 +170,10 @@ function ToggleRequireOnline(idx){
     SendRequest(idx,"ToggleRequireOnline",0);
 }
 
+function SetParent(idx,parentidx){
+    SendRequest(idx,"SetParent",parentidx);
+
+}
 
 function SendRequest(idx,req,val){
         const xhr = new XMLHttpRequest();
@@ -181,8 +189,9 @@ function SendRequest(idx,req,val){
         
         xhr.onload = () => {
         if (xhr.readyState == 4 && xhr.status == 200) {
-            location.reload();
-            console.log("ANSWER:" + JSON.parse(xhr.responseText));
+
+            console.log("ANSWER:" + xhr.responseText);
+            location.reload();            
         } else {
             console.log(`Error: ${xhr.status}`);
         }
@@ -190,39 +199,106 @@ function SendRequest(idx,req,val){
 }
 
 
-function selectParent(idx,curr){
-    var Msg = "Select new parent node";
+async function selectParent(idx, curr = null) {
+  var Msg = "Select new parent node";
 
+  // Smarty fills Opts here...
 
-
-
-    
+    <?php $_smarty_tpl->assign('abs', array(), false, NULL);?>
     <?php
 $_from = $_smarty_tpl->getSmarty()->getRuntime('Foreach')->init($_smarty_tpl, $_smarty_tpl->getValue('parentdata'), 'pd');
 $foreach1DoElse = true;
 foreach ($_from ?? [] as $_smarty_tpl->getVariable('pd')->value) {
 $foreach1DoElse = false;
-if (($_smarty_tpl->getValue('pd')['Idx'] != 'idx')) {
-$_tmp_array = $_smarty_tpl->getValue('abs') ?? [];
+?>
+        <?php if ($_smarty_tpl->getValue('pd')['Idx'] != $_smarty_tpl->getValue('idx')) {?> 
+            <?php $_tmp_array = $_smarty_tpl->getValue('abs') ?? [];
 if (!(is_array($_tmp_array) || $_tmp_array instanceof ArrayAccess)) {
 settype($_tmp_array, 'array');
 }
-$_tmp_array[] = $_smarty_tpl->getValue('pd')['OwnName'];
-$_smarty_tpl->assign('abs', $_tmp_array, false, NULL);
-}
+$_tmp_array[] = array('value'=>$_smarty_tpl->getValue('pd')['Idx'],'label'=>$_smarty_tpl->getValue('pd')['OwnName']);
+$_smarty_tpl->assign('abs', $_tmp_array, false, NULL);?>
+        <?php }?>
+    <?php
 }
 $_smarty_tpl->getSmarty()->getRuntime('Foreach')->restore($_smarty_tpl, 1);?>
+    var Opts = [
+    <?php
+$_from = $_smarty_tpl->getSmarty()->getRuntime('Foreach')->init($_smarty_tpl, $_smarty_tpl->getValue('abs'), 'opt', false, 'i');
+$foreach2DoElse = true;
+foreach ($_from ?? [] as $_smarty_tpl->getVariable('i')->value => $_smarty_tpl->getVariable('opt')->value) {
+$foreach2DoElse = false;
+?>
+        <?php if ($_smarty_tpl->getValue('i') > 0) {?>,<?php }?>{value:"<?php echo $_smarty_tpl->getValue('opt')['value'];?>
+",label:"<?php echo $_smarty_tpl->getValue('opt')['label'];?>
+"}
+    <?php
+}
+$_smarty_tpl->getSmarty()->getRuntime('Foreach')->restore($_smarty_tpl, 1);?>
+    ];
 
-    var Opts = ['<?php echo $_smarty_tpl->getSmarty()->getModifierCallback('implode')("','",$_smarty_tpl->getValue('abs'));?>
-'];
-    
 
-    selectPrompt(Msg,Opts);
+  // Wait for user to choose
+  const selectedValue = await selectPrompt(Msg, Opts, curr);
+
+  if (selectedValue !== null) {
+    console.log("User picked:", selectedValue);
+    SetParent(idx,selectedValue);
+    // do whatever with selectedValue
+  } else {
+    console.log("User cancelled");
+  }
 }
 
 
+function selectPrompt(message, options, defaultValue = null) {
+  return new Promise((resolve) => {
+    const modal = document.getElementById('customPrompt');
+    const msgEl = document.getElementById('customPromptMessage');
+    const selectEl = document.getElementById('customPromptSelect');
+    const okBtn = document.getElementById('customPromptOk');
+    const cancelBtn = document.getElementById('customPromptCancel');
 
-function selectPrompt(message, options) {
+    // Fill modal content
+    msgEl.textContent = message;
+    selectEl.innerHTML = '';
+
+    options.forEach(opt => {
+      const o = document.createElement('option');
+      o.value = opt.value ?? opt;
+      o.textContent = opt.label ?? opt;
+
+      // Mark as selected if this matches defaultValue
+      if (defaultValue !== null && o.value == defaultValue) {
+        o.selected = true;
+      }
+
+      selectEl.appendChild(o);
+    });
+
+    // If no option matched but you still want a default, you can set it here:
+    if (defaultValue !== null) {
+      selectEl.value = defaultValue;
+    }
+
+    // Show modal
+    modal.style.display = 'flex';
+
+    // Clean up old listeners
+    okBtn.onclick = cancelBtn.onclick = null;
+
+    okBtn.onclick = () => {
+      modal.style.display = 'none';
+      resolve(selectEl.value);
+    };
+    cancelBtn.onclick = () => {
+      modal.style.display = 'none';
+      resolve(null);
+    };
+  });
+}
+
+function selectPromptX(message, options) {
   return new Promise((resolve) => {
     const modal = document.getElementById('customPrompt');
     const msgEl = document.getElementById('customPromptMessage');
@@ -248,7 +324,6 @@ function selectPrompt(message, options) {
 
     okBtn.onclick = () => {
       modal.style.display = 'none';
-      alert(selectEl.value);
       resolve(selectEl.value);
     };
     cancelBtn.onclick = () => {

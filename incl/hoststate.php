@@ -1,14 +1,26 @@
 <?php
 
+function SetParent($idx,$parentidx){
+    if($parentidx < 0) $parentidx = null;
+    DB::query('Update hosts SET ParentHost = %? WHERE Idx = %i',$parentidx,$idx);
+}
+
 
 function GetParentList(){
     $ret = array();
-    $res = DB::query("Select Idx, OwnName, HostName, IPv4Address from hosts");
+    $res = DB::query("Select Idx, OwnName, HostName, IPv4Address from hosts WHERE TrackChanges = 1");
+    $ret[-1] =  ['OwnName' => "null", 'Idx' => -1];    
     for($x=0;$x<count($res);$x++){
 
         $ret[ $res[$x]['Idx']  ] = $res[$x];
 
+        if(strlen($ret[ $res[$x]['Idx']  ]['OwnName'] )< 3){
+            $ret[ $res[$x]['Idx']  ]['OwnName'] = $ret[ $res[$x]['Idx']  ]['HostName'];
+        }
+
+
     }
+
     return $ret;
 }
 
@@ -17,7 +29,7 @@ function GetParentList(){
 function OutputStates($all = false){
     $ret = array();
 
-    $sql = 'Select * from hosts WHERE (Active = 1 or Trackchanges = 1) AND HideHost = 0 ORDER BY INET_ATON(IPv4Address)';
+    $sql = 'Select * from hosts WHERE (Active = 1 or TrackChanges = 1) AND HideHost = 0 ORDER BY INET_ATON(IPv4Address)';
     if($all) $sql = 'Select * from hosts WHERE HideHost = 0 ORDER BY INET_ATON(IPv4Address)';
 
 

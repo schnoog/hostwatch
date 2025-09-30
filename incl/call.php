@@ -20,14 +20,37 @@ function ProcessCall(){
         case "SetParent":
             SetParent($idx,$_REQUEST['val']);
             break;
+        case "UpdateTarget":
+            $targetid = $idx;
+            list($targettype,$target,$targetname) = explode("|",$_REQUEST['val'],3);
+            UpdateTarget($targetid,$targettype,$target,$targetname);
+            break;
+        case "AddTarget":
+            list($targettype,$target,$targetname) = explode("|",$_REQUEST['val'],3);
+            AddTarget($idx,$targettype,$target,$targetname);
+            break;
+        case "deleteTarget":
+            $targetid = $idx;
+            DeleteTarget($targetid);            
+            break;
+
 
         default:
-            echo "zahl ist nicht 0";
+            echo "unknown input";
     }    
 
 }
 
+/*
 
+    SendRequest(targerid,"UpdateTarget",tgdata);
+}
+
+function AddTarget(idx,targettypid,target){
+    var tgdata = targettypid + "|" + target;
+    SendRequest(idx,"AddTarget",tgdata);
+
+*/
 
 
 function ToggleField($idx,$fieldname){

@@ -116,11 +116,44 @@ function GetTargetsFull(){
 }
 
 function GetTargetsList(){
-    $res = DB::query('SELECT t.*, t2.* FROM hostwatch.targets t 	JOIN hostwatch.targettypes t2 ON t.targettypid = t2.id');
+    $res = DB::query('SELECT t.id as tid , t.*, t2.* FROM hostwatch.targets t 	JOIN hostwatch.targettypes t2 ON t.targettypid = t2.id');
     $ret = array();
     for($x=0;$x < count($res);$x++){
         $line = $res[$x];
         $ret[$line['hostid']][] = $line;
     }
     return $ret;   
+}
+
+function GetTargetTypeList(){
+    $res = DB::query('Select * from targettypes');
+    $ret = array();
+    for($x = 0 ; $x < count($res) ; $x++){
+        $ret[$res[$x]['id']] = $res[$x];
+
+
+    }
+    return $ret;
+}
+
+
+function UpdateTarget($targetid,$ttype,$target,$targetname){
+    DB::query("Update targets SET targettypid = %i, target = %s, targetname = %s WHERE id = %i",$ttype,$target,$targetname,$targetid);
+}
+
+function AddTarget($hostid,$ttype,$target,$targetname){
+    $data = [
+        'hostid' => $hostid,
+        'targettypid' => $ttype,
+        'target' => $target,
+        'targetname' => $targetname
+
+    ];
+    DB::insert("targets",$data);
+
+}
+
+function DeleteTarget($targetid){
+    DB::query("Delete from targets WHERE id = %i",$targetid);
+
 }

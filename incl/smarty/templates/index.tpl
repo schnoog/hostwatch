@@ -25,6 +25,7 @@
     <div id="targetPromptMessage" style="margin-bottom:10px;"></div>
     <select id="targetPromptSelect" style="width:100%; margin-bottom:10px;"></select>
     <input type="text" id="targetPromptText" style="width:100%; margin-bottom:10px;"></input>
+    <input type="text" id="targetPromptName" style="width:100%; margin-bottom:10px;"></input>    
     <div style="text-align:right;">
       <button id="targetPromptCancel">Cancel</button>
       <button id="targetPromptOk">OK</button>
@@ -83,15 +84,28 @@
 </td>
 
 <td>
-{if (isset($targets[$host.Idx]))}
-    {foreach $targets[$host.Idx] as $tg}
-        {if ($tg.targettype == "web")}
-    
-            <a href="{$tg.target}" target="_blank">{$tg.targetname}</a><br/>
+    <table><tr><td>
+    <button type="button" onclick='selectTarget("{$host.Idx}" );'>+</button>
+    </td><td>
+        <table>
+        {if (isset($targets[$host.Idx]))}
+            {foreach $targets[$host.Idx] as $tg}
+                {if ($tg.targettype == "web")}
 
+                    <tr><td>
+                    <a href="{$tg.target}" target="_blank">{$tg.targetname}</a>
+                    </td><td>
+                    <button type="button" onclick='selectTarget("{$host.Idx}", "{$tg.targettypid}" , "{$tg.target}", "{$tg.tid}", "{$tg.targetname}" );'>&#9999;</button>
+                    <button type="button" onclick='deleteTarget("{$tg.tid}");'>&#x2421;</button>
+                    </td></tr> 
+                {/if}
+            {/foreach}
         {/if}
-    {/foreach}
-{/if}
+        </table>
+    </td></tr></table>
+
+
+
 </td>
 
 </tr>
@@ -110,8 +124,15 @@
 <script>
 {include 'js_base.tpl'}
 {include 'js_parent.tpl'}
+{include 'js_target.tpl'}
 
 {literal}
+
+function deleteTarget(targetid){
+    if (confirm("Delete this target?") == true) {
+        SendRequest(targetid,"deleteTarget");
+    }
+}
 
 
 function ChangeOwnName(idx,oldname){
@@ -136,7 +157,16 @@ function SetParent(idx,parentidx){
 }
 
 
+function  UpdateTarget(targetid,targettypid,target,targetname){
+    var tgdata = targettypid + "|" + target + "|" + targetname;
+    SendRequest(targetid,"UpdateTarget",tgdata);
+}
 
+function AddTarget(idx,targettypid,target,targetname){
+    var tgdata = targettypid + "|" + target + "|" + targetname;
+    SendRequest(idx,"AddTarget",tgdata);
+
+}
 
 
 

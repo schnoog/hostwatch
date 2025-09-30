@@ -21,6 +21,7 @@ $hostdata = OutputStates($CALLALL);
 $parentdata = GetParentList();
 $parentlist = GetParentList(true);
 $targets = GetTargetsList();
+$tarettypes = GetTargetTypeList();
 
 foreach($hostdata as $idx => $hostd ){
     $bgcolor = "";
@@ -35,6 +36,7 @@ foreach($hostdata as $idx => $hostd ){
     $hostdata[$idx]['bgc'] = $bgcolor;
 }
 
+$smarty->assign('tarettypes',$tarettypes);
 $smarty->assign('targets',$targets);
 $smarty->assign('hosts',$hostdata);
 $smarty->assign('parentdata',$parentdata);
